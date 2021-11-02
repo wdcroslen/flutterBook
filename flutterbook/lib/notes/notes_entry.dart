@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutterbook/notes/notes_model.dart';
-//import 'package:flutterbook/notes/notes_list.dart.dart';
+import 'package:flutterbook/notes/notes_list.dart';
 
 class NotesEntry extends StatelessWidget {
 
@@ -11,7 +11,16 @@ class NotesEntry extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _toColor(String color) {
-    return Colors.red;
+    Color c = Colors.red;
+    switch (color) {
+      case "red" : c = Colors.red; break;
+      case "green" : c = Colors.green; break;
+      case "blue" : c = Colors.blue; break;
+      case "yellow" : c = Colors.yellow; break;
+      case "grey" : c = Colors.grey; break;
+      case "purple" : c = Colors.purple; break;
+    }
+    return c;
   }
 
   NotesEntry() {
@@ -130,7 +139,7 @@ class NotesEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<NotesModel>(
-        builder: (BuildContext context, Widget child, NotesModel model) {
+        builder: (BuildContext context, Widget? child, NotesModel model) {
           _titleEditingController.text = model.noteBeingEdited.title;
           _contentEditingController.text = model.noteBeingEdited.content;
           return Scaffold(

@@ -51,8 +51,8 @@ class FlutterBook extends StatelessWidget {
                     children: [
                       _Dummy('Appointments'),
                       _Dummy('Contacts'),
-                      _Dummy('notes'),
-//                      Notes(),
+//                      _Dummy('notes'),
+                      Notes(),
                       _Dummy('Tasks')]
                 )
             )
