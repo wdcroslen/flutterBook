@@ -3,6 +3,7 @@ import 'package:flutterbook/notes/notes.dart';
 import 'package:flutterbook/notes/notes_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutterbook/notes/notes_db_worker.dart';
 
 
 class NotesList extends StatelessWidget {
@@ -29,15 +30,15 @@ class NotesList extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add, color: Colors.white),
               onPressed: () {
-                model.noteBeingEdited = Note();
+                model.entryBeingEdited = Note();
                 model.setColor('');
                 model.setStackIndex(1);
               }
           ),
           body: ListView.builder(
-              itemCount: model.noteList.length,
+              itemCount: model.entryList.length,
               itemBuilder: (BuildContext context, int index) {
-                Note note = model.noteList[index];
+                Note note = model.entryList[index];
                 Color color = _toColor(note.color);
 //
                 return Container(
@@ -53,9 +54,6 @@ class NotesList extends StatelessWidget {
                               onTap: () => _deleteNote(context, model, note)
                           )
                         ],
-
-//                            return Container(
-//                        padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                         child: Card(
                             elevation: 8,
                             color: color,
@@ -63,8 +61,8 @@ class NotesList extends StatelessWidget {
                               title: Text(note.title),
                               subtitle: Text(note.content),
                               onTap: () {
-                                model.noteBeingEdited = note;
-                                model.setColor(model.noteBeingEdited.color);
+                                model.entryBeingEdited = note;
+                                model.setColor(model.entryBeingEdited.color);
                                 model.setStackIndex(1);
                               },
                             )
@@ -93,17 +91,19 @@ class NotesList extends StatelessWidget {
                     }
                 ),
                 ElevatedButton(child : Text("Delete"),
-                    onPressed : () {
-                      model.noteList.remove(note);
-                      model.setStackIndex(0);
+                    onPressed : () async {
+//                      model.entryList.remove(note);
+//                      model.setStackIndex(0);
+                      await NotesDBWorker.db.delete(note.id);
                       Navigator.of(alertContext).pop();
                       Scaffold.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                               backgroundColor : Colors.red,
                               duration : Duration(seconds : 2),
                               content : Text("Note deleted")
                           )
                       );
+                      model.loadData(NotesDBWorker.db);
                     }
                 ) ] ); } );
   }

@@ -1,19 +1,22 @@
+import 'package:flutterbook/base_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 NotesModel notesModel = NotesModel();
 
 class Note {
-  String title ="";
+  int id = -1;
+  String title = "";
   String content ="";
   String color = "";
 
-  String toString() => "{title=$title, content=$content, color=$color }";
+  String toString() => "{ id=$id, title=$title, content=$content, color=$color }";
+
 }
 
-class NotesModel extends Model {
+class NotesModel extends BaseModel<Note> {
   int stackIndex = 0;
-  List<Note> noteList = [];
-  Note noteBeingEdited = Note();
+  List<Note> entryList = [];
+  Note entryBeingEdited = Note();
   String color = '';
 
   void setStackIndex(int stackIndex) {
@@ -23,6 +26,11 @@ class NotesModel extends Model {
 
   void setColor(String color) {
     this.color = color;
+    notifyListeners();
+  }
+  void loadData(dynamic database) async {
+    entryList.clear();
+    entryList.addAll(await database.getAll());
     notifyListeners();
   }
 }

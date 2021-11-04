@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutterbook/notes/notes.dart';
+import 'package:flutterbook/tasks/tasks.dart';
+import 'package:flutter/widgets.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-void main() {
+void main() async {
   runApp(FlutterBook());
 }
 
@@ -53,7 +57,8 @@ class FlutterBook extends StatelessWidget {
                       _Dummy('Contacts'),
 //                      _Dummy('notes'),
                       Notes(),
-                      _Dummy('Tasks')]
+                      Tasks(),]
+//                      _Dummy('Tasks')]
                 )
             )
         )
