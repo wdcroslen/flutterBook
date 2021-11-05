@@ -1,60 +1,103 @@
 import 'package:flutter/material.dart';
-import 'package:flutterbook/notes/notes_model.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:flutterbook/tasks/tasks_model.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutterbook/tasks/tasks_db_worker.dart';
-
-
-//import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:scoped_model/scoped_model.dart';
+import 'tasks_db_worker.dart';
 
 class TasksList extends StatelessWidget {
+  const TasksList({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return ScopedModelDescendant<TasksModel>( /*TasksModel*/
-        builder: (BuildContext context, Widget? child, TasksModel model) {
-          return Scaffold(
-              floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.add, color: Colors.white),
-                  onPressed: () {
-                    model.entityBeingEdited = Task();
-                    model.setStackIndex(1);
-                  }
+  _deleteTask(BuildContext context, TasksModel model, Task task) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (alertContext) {
+          return AlertDialog(
+            title: const Text('Delete Task'),
+            content: Text('Are you sure you want to delete \'${task.description}\''),
+            actions: [
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () => Navigator.of(alertContext).pop(),
               ),
-              body: ListView.builder(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  itemCount: tasksModel.entityList.length,
-                  itemBuilder: (BuildContext inBuildContext, int inIndex) {
-                    Task task = tasksModel.entityList[inIndex];
-                    String sDueDate = '';
-
-                    if (task.dueDate != null) {
-                      List dateParts = task.dueDate.split(",");
-                      DateTime dueDate = DateTime(
-                          int.parse(dateParts[0]), int.parse(dateParts[1]),
-                          int.parse(dateParts[2]));
-                      sDueDate =
-                          DateFormat.yMMMMd("en_US").format(dueDate.toLocal());
-                    }
-                    return Slidable(actionPane: SlidableDrawerActionPane(), actionExtentRatio : .25, child : ListTile(
-                        leading : Checkbox(
-                        value : task.completed == "true" ? true : false, onChanged : (inValue) async {
-                          task.completed = false;
-//                          await TasksDBWorker.db.update(task);
-//                          tasksModel.loadData("tasks", TasksDBWorker.db);
-                        } ),
-
-                    )
-                    );
-                  }
+              TextButton(
+                child: const Text('Delete'),
+                onPressed: () {
+                  model.entityList.remove(task);
+                  model.setStackIndex(0);
+                  Navigator.of(alertContext).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                          content: Text('Task deleted')
+                      )
+                  );
+                },
               )
+            ],
           );
         }
     );
   }
 
-
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<TasksModel> (
+        builder: (context, child, model) =>
+            Scaffold(
+              floatingActionButton: FloatingActionButton(
+                child: const Icon(
+                    Icons.add,
+                    color: Colors.white
+                ),
+                onPressed: () {
+                  model.entityBeingEdited = Task();
+                  model.setStackIndex(1);
+                },
+              ),
+              body: ListView.builder(
+                  itemCount: model.entityList.length,
+                  itemBuilder: (context, int index) {
+                    Task task = tasksModel.entityList[index];
+                    Color color = Colors.green;
+                    return Container(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: Slidable(
+                        actionPane: const SlidableDrawerActionPane(),
+                        actionExtentRatio: .25,
+                        secondaryActions: [
+                          IconSlideAction(
+                              caption: 'Delete',
+                              color: Colors.red,
+                              icon: Icons.delete,
+                              onTap: () => _deleteTask(context, model, task)
+                          )
+                        ],
+                        child: ListTile(
+                          leading: Checkbox(
+                            value: task.completed,
+                            onChanged: (bool? value) {
+                              task.completed = !value!;
+                              TasksDBWorker.db.update(task);
+                              tasksModel.loadData(TasksDBWorker.db);
+                            },
+                          ),
+                          title: Text(
+                            task.description,
+                            style: task.completed ? TextStyle(color: Theme.of(context).disabledColor, decoration: TextDecoration.lineThrough) : null,
+                          ),
+                          subtitle: Text(task.dueDate),
+                          onTap: () {
+                            model.entityBeingEdited = task;
+                            model.setStackIndex(1);
+                          },
+                        ),
+                      ),
+                    );
+                  }
+              ),
+            )
+    );
+  }
 }

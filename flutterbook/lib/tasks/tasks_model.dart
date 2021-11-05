@@ -7,7 +7,7 @@ import 'package:flutterbook/base_model.dart';
 TasksModel tasksModel = TasksModel();
 
 class Task {
-  int id = 0;
+  int id = -1;
   String description = '';
   String dueDate = '';
   bool completed = false; // note that the textbook uses String.

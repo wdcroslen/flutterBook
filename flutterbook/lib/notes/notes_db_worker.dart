@@ -98,9 +98,9 @@ class _SqfliteNotesDBWorker implements NotesDBWorker {
 
 class NotesDBWorker {
 
-//  static final NotesDBWorker db = _SqfliteNotesDBWorker._();
+ static final NotesDBWorker db = _SqfliteNotesDBWorker._();
 
-  static final NotesDBWorker db = _MemoryNotesDBWorker._();
+  // static final NotesDBWorker db = _MemoryNotesDBWorker._();
 
   Future<int> create(Note note){
     return db.create(note);

@@ -5,7 +5,7 @@ import 'package:scoped_model/scoped_model.dart';
 class BaseModel<T> extends Model {
   int stackIndex = 0;
   List<T> entityList = [];
-  var entityBeingEdited;
+  var entityBeingEdited = null;
 
   void setStackIndex(int stackIndex) {
     this.stackIndex = stackIndex;

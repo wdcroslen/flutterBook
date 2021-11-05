@@ -8,12 +8,9 @@ import 'package:flutterbook/tasks/tasks_db_worker.dart';
 
 class Tasks extends StatelessWidget {
 
-//  Tasks() {
-//    tasksModel.loadData(TasksDBWorker.db);
-//  }
-
-  Tasks(){}
-
+ Tasks() {
+   tasksModel.loadData(TasksDBWorker.db);
+ }
 
   @override
   Widget build(BuildContext context) {

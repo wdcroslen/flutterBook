@@ -22,10 +22,10 @@ class _Dummy extends StatelessWidget {
 
 class FlutterBook extends StatelessWidget {
   final List _TABS = [
-    {'icon': Icons.date_range, 'name': 'William'},
-    {'icon': Icons.contacts, 'name': 'Croslen'},
-    {'icon': Icons.note, 'name': 'Utep'},
-    {'icon': Icons.assignment_turned_in, 'name': 'Student'},
+    {'icon': Icons.date_range, 'name': 'Appointments'},
+    {'icon': Icons.contacts, 'name': 'Contacts'},
+    {'icon': Icons.note, 'name': 'Notes'},
+    {'icon': Icons.assignment_turned_in, 'name': 'Tasks'},
   ];
 
   List<IconData> icon_list = [
