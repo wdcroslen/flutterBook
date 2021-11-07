@@ -9,9 +9,9 @@ import "package:flutter_calendar_carousel/classes/event.dart";
 import "package:flutter_calendar_carousel/classes/event_list.dart";
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+
+DateTime currentDate = DateTime.now();
 class AppointmentsList extends StatelessWidget {
   const AppointmentsList({Key? key}) : super(key: key);
 
@@ -51,6 +51,32 @@ class AppointmentsList extends StatelessWidget {
     );
   }
 
+  void _editAppointment(BuildContext inContext, Appointment
+  inAppointment) async {
+    appointmentsModel.entityBeingEdited =
+    await AppointmentsDBWorker.db.get(inAppointment.id);
+    if (appointmentsModel.entityBeingEdited.date == '') {
+      appointmentsModel.setChosenDate('');
+    } else {
+      List dateParts =
+      appointmentsModel.entityBeingEdited.date.split(",");
+      DateTime apptDate = DateTime(
+          int.parse(dateParts[0]), int.parse(dateParts[1]),
+          int.parse(dateParts[2]));
+      appointmentsModel.setChosenDate(
+          DateFormat.yMMMMd("en_US").format(apptDate.toLocal()));
+    }
+  if (appointmentsModel.entityBeingEdited.time == '') {
+    appointmentsModel.setTime('');
+  } else {
+    List timeParts = appointmentsModel.entityBeingEdited.time.split(",");
+    TimeOfDay apptTime = TimeOfDay(
+        hour: int.parse(timeParts[0]), minute: int.parse(timeParts[1]));
+    appointmentsModel.setTime(apptTime.format(inContext));
+  }
+  appointmentsModel.setStackIndex(1); Navigator.pop(inContext);
+}
+
   void _showAppointments(DateTime inDate, BuildContext inContext) async {
     showModalBottomSheet(context: inContext,
         builder: (BuildContext inContext) {
@@ -89,7 +115,7 @@ class AppointmentsList extends StatelessWidget {
                                               return Container(height: 0);
                                             }
                                             String apptTime = "";
-                                            if (appointment.time != null) {
+                                            if (appointment.time != '') {
                                               List timeParts = appointment.time
                                                   .split(
                                                   ",");
@@ -112,16 +138,13 @@ class AppointmentsList extends StatelessWidget {
                                                         title: Text(
                                                             "${appointment
                                                                 .title}$apptTime"),
-                                                        subtitle: appointment
-                                                            .description == null
+                                                        subtitle: appointment.description == ''
                                                             ? null
-                                                            : Text(
-                                                            "${appointment
-                                                                .description}"),
+                                                            : Text(appointment.description),
                                                         onTap: () async {
-                                                          // _editAppointment(
-                                                          //     inContext,
-                                                          //     appointment);
+                                                          _editAppointment(
+                                                              inContext,
+                                                              appointment);
                                                         })
                                                 ),
                                                 secondaryActions: [
@@ -188,9 +211,11 @@ class AppointmentsList extends StatelessWidget {
                       onPressed: () async {
                         appointmentsModel.entityBeingEdited =
                             Appointment();
-                        DateTime now = DateTime.now();
-                        appointmentsModel.entityBeingEdited.apptDate =
+                        DateTime now = currentDate;
+                        print(currentDate);
+                        appointmentsModel.entityBeingEdited.date =
                         "${now.year},${now.month},${now.day}";
+                        now = DateTime.now();
                         appointmentsModel.setChosenDate(
                             DateFormat.yMMMMd("en_US").format(now.toLocal()));
                         appointmentsModel.setTime('');
@@ -206,11 +231,13 @@ class AppointmentsList extends StatelessWidget {
                                     thisMonthDayBorderColor: Colors.grey,
                                     daysHaveCircularBorder: false,
                                     markedDatesMap: markedDateMap,
+                                    selectedDateTime: currentDate,
                                     onDayPressed:
                                         (DateTime inDate, List<
                                         Event> inEvents) {
-                                      _showAppointments(inDate, inContext);
-                                    })
+                                        currentDate = inDate;
+                                        _showAppointments(inDate, inContext);
+                                    },)
                             ))
                       ])
               );

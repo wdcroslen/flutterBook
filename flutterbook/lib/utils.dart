@@ -8,6 +8,12 @@ DateTime toDate(String date) {
   return DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
 }
 
+TimeOfDay toTime(String time) { //TODO: FIX This method to return an actual time
+  List<String> parts = time.split(",");
+  print(parts);
+  return TimeOfDay.now();
+}
+
 Future<String> selectDate(BuildContext context, dynamic model, String date) async {
   DateTime initialDate = DateTime.now();
   DateTime? picked = await showDatePicker(
