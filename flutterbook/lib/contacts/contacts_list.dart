@@ -64,57 +64,6 @@ class ContactsList extends StatelessWidget with Avatar {
     );
   }
 
-  // Future deleteContact(BuildContext inContext,
-  //     Contact inContact) async {
-  //   return showDialog(context : inContext,
-  //   barrierDismissible : false,
-  //   builder : (BuildContext inAlertContext) {
-  //     return AlertDialog(title : Text("Delete Contact"), content : Text(
-  //         "Are you sure you want to delete ${inContact.name}?" ),
-  //         actions : [
-  //         FlatButton(child : Text("Cancel"),
-  //   onPressed: () { Navigator.of(inAlertContext).pop();
-  //   } ),
-  //   FlatButton(child : Text("Delete"), onPressed : () async {
-  //   File avatarFile = File(
-  //   join(utils.docsDir.path, inContact.id.toString()));
-  //   if (avatarFile.existsSync()) { avatarFile.deleteSync();
-  //   }
-  //   await ContactsDBWorker.db.delete(inContact.id); Navigator.of(inAlertContext).pop(); Scaffold.of(inContext).showSnackBar(
-  //   SnackBar(backgroundColor : Colors.red, duration : Duration(seconds : 2), content : Text("Contact deleted")));
-  //   contactsModel.loadData("contacts", ContactsDBWorker.db); }
-  //   )
-  //   );
-  //   }
-  //   );
-  // }
-
-  // void _editContact(BuildContext inContext, Contact
-  // inContact) async {
-  //   contactsModel.entityBeingEdited =
-  //   await ContactsDBWorker.db.get(inContact.id);
-  //   if (contactsModel.entityBeingEdited.date == '') {
-  //     contactsModel.setChosenDate('');
-  //   } else {
-  //     List dateParts =
-  //     contactsModel.entityBeingEdited.date.split(",");
-  //     DateTime apptDate = DateTime(
-  //         int.parse(dateParts[0]), int.parse(dateParts[1]),
-  //         int.parse(dateParts[2]));
-  //     contactsModel.setChosenDate(
-  //         DateFormat.yMMMMd("en_US").format(apptDate.toLocal()));
-  //   }
-  //   if (contactsModel.entityBeingEdited.time == '') {
-  //     contactsModel.setTime('');
-  //   } else {
-  //     List timeParts = contactsModel.entityBeingEdited.time.split(",");
-  //     TimeOfDay apptTime = TimeOfDay(
-  //         hour: int.parse(timeParts[0]), minute: int.parse(timeParts[1]));
-  //     contactsModel.setTime(apptTime.format(inContext));
-  //   }
-  //   contactsModel.setStackIndex(1); Navigator.pop(inContext);
-  // }
-
 
   @override
   Widget build(BuildContext context) {
