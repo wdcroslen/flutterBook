@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutterbook/notes/notes.dart';
 import 'package:flutterbook/tasks/tasks.dart';
+import 'package:flutterbook/contacts/contacts.dart';
 import 'package:flutterbook/appointments/appointments.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
+import 'contacts/avatar.dart';
 
 void main() async {
-  runApp(FlutterBook());
+  // startMeUp() async {
+    //WidgetsFlutterBinding.ensureInitialized();
+    //Avatar.docsDir = await getApplicationDocumentsDirectory();
+    runApp(FlutterBook());
+  // }
+  // startMeUp();
+  // runApp(FlutterBook());
 }
 
 class _Dummy extends StatelessWidget {
@@ -54,7 +63,8 @@ class FlutterBook extends StatelessWidget {
                     children: [
                       Appointments(),
                       //_Dummy('Appointments'),
-                      _Dummy('Contacts'),
+                      Contacts(),
+                      // _Dummy('Contacts'),
 //                      _Dummy('notes'),
                       Notes(),
                       Tasks(),]
