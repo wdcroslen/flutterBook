@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutterbook/charts/sliders.dart';
+import 'package:flutterbook/grids/grid_entry.dart';
 import 'package:flutter/cupertino.dart';
 
-final List<String> _items = ['assets/images/lock.png','assets/images/lock.png','assets/images/lock.png'];
-
+final List<String> _items = ['assets/images/tv.png','assets/images/clothes.png','assets/images/phones.png'];
+final List<String> _networkItems = ['https://dummyimage.com/400x400/000/f44336&text=water','https://dummyimage.com/400x400/000/f44336&text=clothes','https://dummyimage.com/400x400/000/fff&text=phones'];
+//https://dummyimage.com/600x400/000/fff&text=fire
 class GridPage extends StatelessWidget {
 
   // GridPage(){}
@@ -24,7 +25,7 @@ class GridPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          Sliders(_items[index]),)
+                          GridEntry(_networkItems[index]),)
                     );
                 },
 
@@ -33,17 +34,16 @@ class GridPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const <Widget>[Text('test')],
+                    children: const <Widget>[/*Text('Something something')*/],
                   ),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                        // AssetImage('icons/heart.png', package: 'my_icons')
-
                       image:
                       // AssetImage('lock.png', package: 'images')
-                        AssetImage('assets/images/lock.png')
-                        // NetworkImage('http://pngimg.com/uploads/simpsons/simpsons_PNG3.png')
+                      //   AssetImage(_items[index])
+                        // AssetImage('assets/images/lock.png')
+                        NetworkImage(_networkItems[index])
                     ),
                   ),
                 ),

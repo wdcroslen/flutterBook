@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutterbook/charts/grid.dart';
+import 'package:flutterbook/grids/grid.dart';
 import 'package:flutterbook/notes/notes.dart';
 import 'package:flutterbook/tasks/tasks.dart';
 import 'package:flutterbook/contacts/contacts.dart';
-import 'package:flutterbook/charts/charts.dart';
-import 'package:flutterbook/charts/sliders.dart';
+import 'package:flutterbook/grids/charts.dart';
+import 'package:flutterbook/grids/grid_entry.dart';
 import 'package:flutterbook/appointments/appointments.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
@@ -26,7 +26,7 @@ class FlutterBook extends StatelessWidget {
     {'icon': Icons.contacts, 'name': 'Contacts'},
     {'icon': Icons.note, 'name': 'Notes'},
     {'icon': Icons.assignment_turned_in, 'name': 'Tasks'},
-    {'icon': Icons.lock, 'name': 'Vault'},
+    {'icon': Icons.shopping_cart, 'name': 'Shopping'},
   ];
 
   List<IconData> icon_list = [
@@ -34,7 +34,7 @@ class FlutterBook extends StatelessWidget {
     Icons.contacts,
     Icons.note,
     Icons.assignment_turned_in,
-    Icons.lock,
+    Icons.shopping_cart,
   ];
 
   @override

@@ -40,6 +40,7 @@ dependencies:
   path_provider: ^2.0.6
   fl_chart: ^0.40.2
   percent_indicator: ^3.4.0
+  flutter_colorpicker: ^0.5.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -72,6 +73,9 @@ flutter:
   assets:
    - assets/images/lock.png
    - assets/images/unlock.png
+   - assets/images/phones.png
+   - assets/images/tv.png
+   - assets/images/clothes.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
