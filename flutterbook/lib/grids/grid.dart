@@ -17,7 +17,7 @@ final List<String> _networkItems = ['https://dummyimage.com/400x400/000/f44336&t
   class Grids extends StatelessWidget {
 
     Grids() {
-      // gridsModel.loadData(GridsDBWorker.db);
+      gridsModel.loadData(GridsDBWorker.db);
     }
 
     @override

@@ -154,7 +154,7 @@ class NotesEntry extends StatelessWidget {
           _contentEditingController.text = model.entryBeingEdited.content;
           return Scaffold(
               bottomNavigationBar: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   child: _buildControlButtons(context, model)
               ),
               body: Form(

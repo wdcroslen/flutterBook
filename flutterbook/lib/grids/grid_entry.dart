@@ -218,15 +218,30 @@ class _SliderPageState extends State<SliderPage> {
           child: Column(children: <Widget>[
             _createSlider(),
             _createSwitch(),
+          Container(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Row(
+              children: [
             ElevatedButton(
-              child: const Text('Select',
-                style: TextStyle(fontSize: 20),
+              child: const Text('Select TextColor',
+                style: TextStyle(fontSize: 14),
               ),
               onPressed: () {
                 pickColor(context);
                 printColor();
               }
             ),
+            SizedBox(width: 10,),
+            ElevatedButton(
+                child: const Text('Select BackgroundColor',
+                  style: TextStyle(fontSize: 14),
+                ),
+                onPressed: () {
+                  pickColor(context);
+                  printColor();
+                }
+            ),]),
+          ),
             Expanded(child: _createImage())
           ])
       ),
