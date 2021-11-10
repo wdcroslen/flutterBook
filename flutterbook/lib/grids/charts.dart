@@ -4,7 +4,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:scoped_model/scoped_model.dart';
 // // import 'contacts_entry.dart';
-// import 'charts_model.dart';
+// import 'grids_model.dart';
 // // import 'contacts_list.dart';
 // import 'package:flutterbook/contacts/contacts_db_worker.dart';
 //

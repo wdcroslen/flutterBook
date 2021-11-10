@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'charts_model.dart';
+import 'grids_model.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-
-
 import 'package:flutter/cupertino.dart';
+import 'grids_db_worker.dart';
 
 // class GridEntry extends StatelessWidget {
 //
@@ -30,34 +29,72 @@ import 'package:flutter/cupertino.dart';
 class GridEntry extends StatelessWidget {
   String imageURL = '';
 
-
   final TextEditingController _backgroundColorEditingController = TextEditingController();
   final TextEditingController _textColorEditingController = TextEditingController();
 
   GridEntry(String url) {
     imageURL = url;
+    print('GridEntry');
+    print(url);
     // _backgroundColorEditingController.addListener(() {
-    //   contactsModel.entityBeingEdited.backgroundColor = _backgroundColorEditingController.text;
+    //   gridsModel.entityBeingEdited.backgroundColor = _backgroundColorEditingController.text;
     // });
     // _backgroundColorEditingController.addListener(() {
-    //   contactsModel.entityBeingEdited.phone = _textColorEditingController.text;
+    //   gridsModel.entityBeingEdited.phone = _textColorEditingController.text;
     // });
   }
 
+
+//     return ScopedModelDescendant<NotesModel>(
+//         builder: (BuildContext context, Widget? child, NotesModel model) {
+//           _titleEditingController.text = model.entryBeingEdited.title;
+//           _contentEditingController.text = model.entryBeingEdited.content;
+//           return Scaffold(
+//               bottomNavigationBar: Padding(
+//                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+//                   child: _buildControlButtons(context, model)
+//               ),
+//               body: Form(
+//                   key: _formKey,
+//                   child: ListView(
+//                       children: [
+//                         _buildTitleListTile(),
+//                         _buildContentListTile(),
+//                         _buildColorListTile(context)
+//                       ]
+//                   )
+//               )
+//           );
+//         }
+//     );
+//   }
+// }
+
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<GridsModel>(
-        model: gridsModel,
-        child: ScopedModelDescendant<GridsModel>(
-            builder: (BuildContext context, Widget? child, GridsModel model) {
-              return IndexedStack(
-                index: model.stackIndex,
-                children: <Widget>[SliderPage(imageURL)],
-              );
-            }
-        )
+    return ScopedModelDescendant<GridsModel>(
+        builder: (BuildContext context, Widget? child, GridsModel model) {
+          return Scaffold(
+            body:SliderPage(imageURL),
+          );
+        }
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ScopedModel<GridsModel>(
+  //       model: gridsModel,
+  //       child: ScopedModelDescendant<GridsModel>(
+  //           builder: (BuildContext context, Widget? child, GridsModel model) {
+  //             return IndexedStack(
+  //               index: model.stackIndex,
+  //               children: <Widget>[SliderPage(imageURL)],
+  //             );
+  //           }
+  //       )
+  //   );
+  // }
 }
 
 class SliderPage extends StatefulWidget {
@@ -78,12 +115,17 @@ class _SliderPageState extends State<SliderPage> {
 
   colorToHexString(Color color) {
     String c = color.value.toRadixString(16).substring(2, 8);
-    String first = c.substring(2);
-    String mid = first.substring(0,2);
+    String first = c.substring(0,2);
+    String mid = c.substring(2,4);
+    String last = c.substring(4);
     print(c);
     print(first);
     print(mid);
+    print(last);
     print('hello');
+    String newColor = mid + first + last;
+    print(newColor);
+    return newColor;
   }
 
   Widget buildColorPicker() => ColorPicker(
@@ -128,9 +170,49 @@ class _SliderPageState extends State<SliderPage> {
     print(colorToHexString(currentColor));
   }
 
+  Row _buildControlButtons(BuildContext context, GridsModel model) {
+    return Row(children: [
+      FlatButton(
+        child: Text('Cancel'),
+        onPressed: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          model.setStackIndex(0);
+        },
+      ),
+      Spacer(),
+      FlatButton(
+        child: Text('Save'),
+        onPressed: () {
+          _save(context, gridsModel);
+        },
+      )
+    ]
+    );
+  }
+
+  void _save(BuildContext context, GridsModel model) async {
+    if (model.entityBeingEdited.id == -1) {
+      await GridsDBWorker.db.create(gridsModel.entityBeingEdited);
+    } else {
+      await GridsDBWorker.db.update(gridsModel.entityBeingEdited);
+    }
+    gridsModel.loadData(GridsDBWorker.db);
+    model.setStackIndex(0);
+    Scaffold.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2), content: Text('Item saved'),
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Padding(
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+      child: _buildControlButtons(context, gridsModel)
+      ),
       body: Container(
           padding: EdgeInsets.only(top: 50.0),
           child: Column(children: <Widget>[

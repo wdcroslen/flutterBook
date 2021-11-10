@@ -26,7 +26,7 @@ class FlutterBook extends StatelessWidget {
     {'icon': Icons.contacts, 'name': 'Contacts'},
     {'icon': Icons.note, 'name': 'Notes'},
     {'icon': Icons.assignment_turned_in, 'name': 'Tasks'},
-    {'icon': Icons.shopping_cart, 'name': 'Shopping'},
+    {'icon': Icons.camera, 'name': 'Custom'},
   ];
 
   List<IconData> icon_list = [
@@ -34,7 +34,7 @@ class FlutterBook extends StatelessWidget {
     Icons.contacts,
     Icons.note,
     Icons.assignment_turned_in,
-    Icons.shopping_cart,
+    Icons.camera,
   ];
 
   @override
@@ -50,9 +50,6 @@ class FlutterBook extends StatelessWidget {
                         Tab(icon: Icon(tab['icon']),
                             text: tab['name'].toString())).toList())
                 ),
-//                body: TabBarView(
-//                  children: _TABS.map((tab) => _Dummy(tab['name'])).toList(),
-//                )
                 body: TabBarView(
                     children: [
                       Appointments(),
@@ -63,7 +60,7 @@ class FlutterBook extends StatelessWidget {
                       Notes(),
                       Tasks(),
                     // Sliders()
-                    GridPage()
+                    Grids()
                     ]
 //                      _Dummy('Tasks')]
                 )
