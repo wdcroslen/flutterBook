@@ -26,7 +26,7 @@ class GridsList extends StatelessWidget {
               ),
               TextButton(
                 child: const Text('Delete'),
-                onPressed: ()  {
+                onPressed: () {
                   model.entityList.remove(grid);
                   model.setStackIndex(0);
                   Navigator.of(alertContext).pop();
@@ -50,59 +50,60 @@ class GridsList extends StatelessWidget {
     return ScopedModel<GridsModel>(
         model: gridsModel,
         child: ScopedModelDescendant<GridsModel>(
-        builder: (BuildContext inContext, Widget? inChild,
-        GridsModel inModel)
-    {
-      return Scaffold(
-          floatingActionButton: FloatingActionButton(
-              child: const Icon(Icons.add, color: Colors.white),
-              onPressed: () {
-                gridsModel.entityBeingEdited = Grid();
-                gridsModel.setStackIndex(1);
-              }
-          ),
-          body: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-                crossAxisCount: 3,
-              ),
-              itemCount:  gridsModel.entityList.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              GridEntry(gridsModel.entityList[index].url),)
-                    );
-                  },
+            builder: (BuildContext inContext, Widget? inChild,
+                GridsModel inModel) {
+              return Scaffold(
+                floatingActionButton: FloatingActionButton(
+                    child: const Icon(Icons.add, color: Colors.white),
+                    onPressed: () {
+                      gridsModel.entityBeingEdited = Grid();
+                      gridsModel.setStackIndex(1);
+                    }
+                ),
+                body: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2,
+                      crossAxisCount: 3,
+                    ),
+                    itemCount: gridsModel.entityList.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    GridEntry())
+                          );
+                        },
 
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const <Widget>[ /*Text('Something something')*/
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image:
-                          // AssetImage('lock.png', package: 'images')
-                          //   AssetImage(_items[index])
-                          // AssetImage('assets/images/lock.png')
-                          NetworkImage(gridsModel.entityList[index].url)
-                      ),
-                    ),
-                  ),
-                );
-              })
-      );
-    }
-    )
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[ Center(child: Text('Hello',
+                                style: TextStyle(
+                                    color: gridsModel.entityList[index]
+                                        .textColor,
+                                    fontSize: 20)))
+                            ],
+                          ),
+                          decoration: BoxDecoration(shape: BoxShape.circle,
+                              color: gridsModel.entityList[index]
+                                  .backgroundColor),
+                          width: 40,
+                          // fit: BoxFit.contain,
+                          height: 40,
+                        ),
+
+                        // NetworkImage(gridsModel.entityList[index].url)
+                      );
+                    }
+                ),
+              );
+            })
     );
   }
 }

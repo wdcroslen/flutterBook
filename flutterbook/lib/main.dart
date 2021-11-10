@@ -3,8 +3,6 @@ import 'package:flutterbook/grids/grid.dart';
 import 'package:flutterbook/notes/notes.dart';
 import 'package:flutterbook/tasks/tasks.dart';
 import 'package:flutterbook/contacts/contacts.dart';
-import 'package:flutterbook/grids/charts.dart';
-import 'package:flutterbook/grids/grid_entry.dart';
 import 'package:flutterbook/appointments/appointments.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,8 +10,8 @@ import 'contacts/avatar.dart';
 
 void main() async {
   // startMeUp() async {
-    //WidgetsFlutterBinding.ensureInitialized();
-    //Avatar.docsDir = await getApplicationDocumentsDirectory();
+  //   WidgetsFlutterBinding.ensureInitialized();
+  //   Avatar.docsDir = await getApplicationDocumentsDirectory();
     runApp(FlutterBook());
   // }
   // startMeUp();

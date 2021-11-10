@@ -1,24 +1,20 @@
 import 'package:flutterbook/base_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 GridsModel gridsModel = GridsModel();
 
 class Grid {
   int id = -1;
-  String backgroundColor = '000';
-  String textColor = 'fff';
+  Color backgroundColor = Colors.black;
+  Color textColor = Colors.white;
   String text = '';
-  String url = 'https://dummyimage.com/400x400/000/fff&text=';
-  String defaultURL = 'https://dummyimage.com/400x400/';
 
 
-  updateURL(){
-    url = defaultURL+text;
-  }
-
-  updateColor(){
-    url = defaultURL + backgroundColor + '/' + textColor + '&text=' + text;
-    print(url);
-  }
+  // updateColor(){
+  //   url = defaultURL + backgroundColor + '/' + textColor + '&text=' + text;
+  //   print(url);
+  // }
 
 
   @override

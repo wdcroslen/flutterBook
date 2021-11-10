@@ -27,15 +27,12 @@ import 'grids_db_worker.dart';
 
 
 class GridEntry extends StatelessWidget {
-  String imageURL = '';
 
   final TextEditingController _backgroundColorEditingController = TextEditingController();
   final TextEditingController _textColorEditingController = TextEditingController();
 
-  GridEntry(String url) {
-    imageURL = url;
-    print('GridEntry');
-    print(url);
+  GridEntry() {
+    // print('GridEntry');
     // _backgroundColorEditingController.addListener(() {
     //   gridsModel.entityBeingEdited.backgroundColor = _backgroundColorEditingController.text;
     // });
@@ -44,38 +41,12 @@ class GridEntry extends StatelessWidget {
     // });
   }
 
-
-//     return ScopedModelDescendant<NotesModel>(
-//         builder: (BuildContext context, Widget? child, NotesModel model) {
-//           _titleEditingController.text = model.entryBeingEdited.title;
-//           _contentEditingController.text = model.entryBeingEdited.content;
-//           return Scaffold(
-//               bottomNavigationBar: Padding(
-//                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-//                   child: _buildControlButtons(context, model)
-//               ),
-//               body: Form(
-//                   key: _formKey,
-//                   child: ListView(
-//                       children: [
-//                         _buildTitleListTile(),
-//                         _buildContentListTile(),
-//                         _buildColorListTile(context)
-//                       ]
-//                   )
-//               )
-//           );
-//         }
-//     );
-//   }
-// }
-
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<GridsModel>(
         builder: (BuildContext context, Widget? child, GridsModel model) {
           return Scaffold(
-            body:SliderPage(imageURL),
+            body:SliderPage(),
           );
         }
     );
@@ -100,18 +71,15 @@ class GridEntry extends StatelessWidget {
 class SliderPage extends StatefulWidget {
   String imageURL = '';
 
-
-  SliderPage(String url){
-    imageURL = url;
-  }
   //const SliderPage({Key? key}) : super(key: key);
 
   @override
-  _SliderPageState createState() => _SliderPageState(imageURL);
+  _SliderPageState createState() => _SliderPageState();
 }
 
 class _SliderPageState extends State<SliderPage> {
   Color currentColor = Colors.red;
+  Color textColor = Colors.green;
 
   colorToHexString(Color color) {
     String c = color.value.toRadixString(16).substring(2, 8);
@@ -128,6 +96,13 @@ class _SliderPageState extends State<SliderPage> {
     return newColor;
   }
 
+  Widget buildTextColorPicker() => ColorPicker(
+    pickerColor: textColor,
+    enableAlpha: false,
+    showLabel: false,
+    onColorChanged: (color) => setState(() => textColor = color),
+  );
+
   Widget buildColorPicker() => ColorPicker(
     pickerColor: currentColor,
     enableAlpha: false,
@@ -135,39 +110,53 @@ class _SliderPageState extends State<SliderPage> {
     onColorChanged: (color) => setState(() => currentColor = color),
   );
 
-  void pickColor(BuildContext context) {
+  void pickColor(BuildContext context, bool background) {
     var open = true;
     showDialog(context: context,
         builder: (context) =>
             AlertDialog(
                 title: const Text('Pick Color'),
                 content: Column(children: [
-                    buildColorPicker(),
-                TextButton(
-                    child: const Text('Select',
+                    if (background) buildColorPicker(),
+                    if (!background)  buildTextColorPicker(),
+                    if (background) TextButton(
+                    child: const Text('Select Background',
                       style: TextStyle(fontSize: 20),
                     ),
                     onPressed: () {
                       if (open) Navigator.pop(context);
                       open = false;
                     }
-    ),]
+                  ),
+                  if (!background) TextButton(
+                      child: const Text('Select Text',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        if (open) Navigator.pop(context);
+                        open = false;
+                      }
+                  )
+
+                  ,]
     )
     )
     );
   }
 
-
   double _sliderValue = 150.0;
   bool? _blockCheck = true;
-  String _imageURL = '';
-
-  _SliderPageState(String url){
-    _imageURL = url;
-  }
 
   void printColor(){
     print(colorToHexString(currentColor));
+  }
+
+  String getTextColor(){
+    return colorToHexString(textColor);
+  }
+
+  getColorString(Color color){
+    return colorToHexString(color);
   }
 
   Row _buildControlButtons(BuildContext context, GridsModel model) {
@@ -191,6 +180,8 @@ class _SliderPageState extends State<SliderPage> {
   }
 
   void _save(BuildContext context, GridsModel model) async {
+    model.entityBeingEdited.textColor = colorToHexString(textColor);
+    model.entityBeingEdited.backgroundColor = colorToHexString(currentColor);
     if (model.entityBeingEdited.id == -1) {
       await GridsDBWorker.db.create(gridsModel.entityBeingEdited);
     } else {
@@ -222,25 +213,42 @@ class _SliderPageState extends State<SliderPage> {
               padding: EdgeInsets.only(left: 30.0),
               child: Row(
               children: [
-            ElevatedButton(
+                Column(children: [
+            Container(
+              decoration: BoxDecoration(shape: BoxShape.circle,
+              color: textColor),
+            width: 20,
+              height: 20,
+            ),
+                  ElevatedButton(
               child: const Text('Select TextColor',
                 style: TextStyle(fontSize: 14),
               ),
               onPressed: () {
-                pickColor(context);
+                pickColor(context, false);
                 printColor();
               }
             ),
+                ]),
             SizedBox(width: 10,),
+        Column(children: [
+          Container(
+            decoration: BoxDecoration(shape: BoxShape.circle,
+                color: currentColor),
+            width: 20,
+            height: 20,
+          ),
             ElevatedButton(
                 child: const Text('Select BackgroundColor',
                   style: TextStyle(fontSize: 14),
                 ),
                 onPressed: () {
-                  pickColor(context);
+                  pickColor(context, true);
                   printColor();
                 }
-            ),]),
+            )
+          ],),
+              ]),
           ),
             Expanded(child: _createImage())
           ])
@@ -268,11 +276,19 @@ class _SliderPageState extends State<SliderPage> {
   }
 
   Widget _createImage() {
-    return Image(
-      image:
-      NetworkImage(_imageURL),
+    // return Image(
+    //   image:
+    //   NetworkImage(_imageURL),
+    //   width: _sliderValue,
+    //   fit: BoxFit.contain,
+    // );
+    return Container(
+      decoration: BoxDecoration(shape: BoxShape.circle,
+          color: currentColor),
       width: _sliderValue,
-      fit: BoxFit.contain,
+       // fit: BoxFit.contain,
+      height: 20,
+      child: Center(child: Text('Hello', style: TextStyle(color: textColor,fontSize: _sliderValue/5)))
     );
   }
 

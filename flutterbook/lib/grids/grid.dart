@@ -28,7 +28,7 @@ final List<String> _networkItems = ['https://dummyimage.com/400x400/000/f44336&t
               builder: (BuildContext context, Widget? child, GridsModel model) {
                 return IndexedStack(
                   index: model.stackIndex,
-                  children: <Widget>[GridsList(), GridEntry('https://dummyimage.com/400x400/000/fff&text=EnterText')],
+                  children: <Widget>[GridsList(), GridEntry()],
                 );
               }
           )
