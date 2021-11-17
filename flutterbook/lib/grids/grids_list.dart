@@ -68,14 +68,18 @@ class GridsList extends StatelessWidget {
                     ),
                     itemCount: gridsModel.entityList.length,
                     itemBuilder: (context, index) {
+                      Grid grid = gridsModel.entityList[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    GridEntry())
-                          );
+                          gridsModel.entityBeingEdited = grid;
+                         // gridsModel.setColor(model.entryBeingEdited.color);
+                          gridsModel.setStackIndex(1);
+                         //  Navigator.push(
+                         //      context,
+                         //      MaterialPageRoute(
+                         //        builder: (context) =>
+                         //            GridEntry())
+                         //  );
                         },
 
                         child: Container(
@@ -85,14 +89,14 @@ class GridsList extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[ Center(child: Text('Hello',
                                 style: TextStyle(
-                                    color: gridsModel.entityList[index]
-                                        .textColor,
+                                    color: Color(int.parse(gridsModel.entityList[index]
+                                        .textColor)),
                                     fontSize: 20)))
                             ],
                           ),
                           decoration: BoxDecoration(shape: BoxShape.circle,
-                              color: gridsModel.entityList[index]
-                                  .backgroundColor),
+                              color: Color(int.parse(gridsModel.entityList[index]
+                                  .backgroundColor))),
                           width: 40,
                           // fit: BoxFit.contain,
                           height: 40,

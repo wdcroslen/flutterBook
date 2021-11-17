@@ -6,9 +6,11 @@ GridsModel gridsModel = GridsModel();
 
 class Grid {
   int id = -1;
-  Color backgroundColor = Colors.black;
-  Color textColor = Colors.white;
+  // Color backgroundColor = Colors.black;
+  // Color textColor = Colors.white;
   String text = '';
+  String backgroundColor = '0';
+  String textColor = '0';
 
 
   // updateColor(){

@@ -72,7 +72,7 @@ class _SqfliteGridsDBWorker implements GridsDBWorker {
     Database db = await database;
     int id = await db.rawInsert(
         "INSERT INTO $TBL_NAME ($KEY_BACKGROUND_COLOR, $KEY_TEXT_COLOR, $KEY_TEXT) "
-            "VALUES (?, ?, ?, ?)",
+            "VALUES (?, ?, ?)",
         [grid.backgroundColor, grid.textColor, grid.text]
     );
     print("Added: $grid");

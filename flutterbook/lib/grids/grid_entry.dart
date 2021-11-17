@@ -52,20 +52,26 @@ class GridEntry extends StatelessWidget {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ScopedModel<GridsModel>(
-  //       model: gridsModel,
-  //       child: ScopedModelDescendant<GridsModel>(
-  //           builder: (BuildContext context, Widget? child, GridsModel model) {
-  //             return IndexedStack(
-  //               index: model.stackIndex,
-  //               children: <Widget>[SliderPage(imageURL)],
-  //             );
-  //           }
-  //       )
-  //   );
-  // }
+  /*
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<NotesModel>(
+        builder: (BuildContext context, Widget? child, NotesModel model) {
+      _titleEditingController.text = model.entryBeingEdited.title;
+      _contentEditingController.text = model.entryBeingEdited.content;
+      return Scaffold(
+          bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+    child: _buildControlButtons(context, model)
+    ),
+    body: Form(
+    key: _formKey,
+    child: ListView(
+    children: [
+    _buildTitleListTile(),
+    _buildContentListTile(),
+    _buildColorListTile(context)
+    ]
+    */
 }
 
 class SliderPage extends StatefulWidget {
@@ -78,21 +84,33 @@ class SliderPage extends StatefulWidget {
 }
 
 class _SliderPageState extends State<SliderPage> {
-  Color currentColor = Colors.red;
-  Color textColor = Colors.green;
+  Color currentColor = Colors.black;
+  Color textColor = Colors.white; //Color(int.parse(model.entityBeingEdited.textColor))
 
   colorToHexString(Color color) {
+    String a = color.toString();
+    int val = color.value;
+    String valString = val.toString();
+
     String c = color.value.toRadixString(16).substring(2, 8);
     String first = c.substring(0,2);
     String mid = c.substring(2,4);
     String last = c.substring(4);
-    print(c);
-    print(first);
-    print(mid);
-    print(last);
-    print('hello');
+    print('before');
+    // print(a);
+    // Color aColor = Color(val);
+    // print(aColor.toString());
+    print(valString);
+    var q = int.parse(valString);
+    // print(val);
+    print(q);
+    print('here');
+    // print(c);
+    // print(first);
+    // print(mid);
+    // print(last);
+    // print('hello');
     String newColor = mid + first + last;
-    print(newColor);
     return newColor;
   }
 
@@ -172,7 +190,7 @@ class _SliderPageState extends State<SliderPage> {
       FlatButton(
         child: Text('Save'),
         onPressed: () {
-          _save(context, gridsModel);
+          _save(context, model);
         },
       )
     ]
@@ -180,14 +198,14 @@ class _SliderPageState extends State<SliderPage> {
   }
 
   void _save(BuildContext context, GridsModel model) async {
-    model.entityBeingEdited.textColor = colorToHexString(textColor);
-    model.entityBeingEdited.backgroundColor = colorToHexString(currentColor);
+    model.entityBeingEdited.textColor = textColor.value.toString();
+    model.entityBeingEdited.backgroundColor = currentColor.value.toString();
     if (model.entityBeingEdited.id == -1) {
-      await GridsDBWorker.db.create(gridsModel.entityBeingEdited);
+      await GridsDBWorker.db.create(model.entityBeingEdited);
     } else {
-      await GridsDBWorker.db.update(gridsModel.entityBeingEdited);
+      await GridsDBWorker.db.update(model.entityBeingEdited);
     }
-    gridsModel.loadData(GridsDBWorker.db);
+    model.loadData(GridsDBWorker.db);
     model.setStackIndex(0);
     Scaffold.of(context).showSnackBar(
         const SnackBar(

@@ -9,9 +9,9 @@ import 'grids_list.dart';
 import 'grids_db_worker.dart';
 import 'package:flutterbook/contacts/contacts_db_worker.dart';
 
-final List<String> _items = ['assets/images/tv.png','assets/images/clothes.png','assets/images/phones.png'];
-final List<String> _networkItems = ['https://dummyimage.com/400x400/000/f44336&text=water','https://dummyimage.com/400x400/000/f44336&text=clothes','https://dummyimage.com/400x400/000/fff&text=phones'];
-//https://dummyimage.com/600x400/000/fff&text=fire
+// final List<String> _items = ['assets/images/tv.png','assets/images/clothes.png','assets/images/phones.png'];
+// final List<String> _networkItems = ['https://dummyimage.com/400x400/000/f44336&text=water','https://dummyimage.com/400x400/000/f44336&text=clothes','https://dummyimage.com/400x400/000/fff&text=phones'];
+// //https://dummyimage.com/600x400/000/fff&text=fire
 
 
   class Grids extends StatelessWidget {
