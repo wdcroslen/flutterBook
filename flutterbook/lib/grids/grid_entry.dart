@@ -5,41 +5,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'grids_db_worker.dart';
 
-// class GridEntry extends StatelessWidget {
-//
-//   final TextEditingController _nameEditingController = TextEditingController();
-//   final TextEditingController _phoneEditingController = TextEditingController();
-//   final TextEditingController _emailEditingController = TextEditingController();
-//
-//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-//
-//   GridEntry() {
-//     _nameEditingController.addListener(() {
-//       contactsModel.entityBeingEdited.name = _nameEditingController.text;
-//     });
-//     _phoneEditingController.addListener(() {
-//       contactsModel.entityBeingEdited.phone = _phoneEditingController.text;
-//     });
-//     _emailEditingController.addListener(() {
-//       contactsModel.entityBeingEdited.email = _emailEditingController.text;
-//     });
-//   }
-
-
 class GridEntry extends StatelessWidget {
-
-  final TextEditingController _backgroundColorEditingController = TextEditingController();
-  final TextEditingController _textColorEditingController = TextEditingController();
-
-  GridEntry() {
-    // print('GridEntry');
-    // _backgroundColorEditingController.addListener(() {
-    //   gridsModel.entityBeingEdited.backgroundColor = _backgroundColorEditingController.text;
-    // });
-    // _backgroundColorEditingController.addListener(() {
-    //   gridsModel.entityBeingEdited.phone = _textColorEditingController.text;
-    // });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,41 +17,18 @@ class GridEntry extends StatelessWidget {
         }
     );
   }
-
-  /*
-  Widget build(BuildContext context) {
-    return ScopedModelDescendant<NotesModel>(
-        builder: (BuildContext context, Widget? child, NotesModel model) {
-      _titleEditingController.text = model.entryBeingEdited.title;
-      _contentEditingController.text = model.entryBeingEdited.content;
-      return Scaffold(
-          bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-    child: _buildControlButtons(context, model)
-    ),
-    body: Form(
-    key: _formKey,
-    child: ListView(
-    children: [
-    _buildTitleListTile(),
-    _buildContentListTile(),
-    _buildColorListTile(context)
-    ]
-    */
 }
 
 class SliderPage extends StatefulWidget {
-  String imageURL = '';
-
-  //const SliderPage({Key? key}) : super(key: key);
 
   @override
   _SliderPageState createState() => _SliderPageState();
 }
 
 class _SliderPageState extends State<SliderPage> {
-  Color currentColor = Colors.black;
-  Color textColor = Colors.white; //Color(int.parse(model.entityBeingEdited.textColor))
+  Color currentColor =// Colors.green;
+  Color(int.parse(gridsModel.entityBeingEdited.backgroundColor));
+  Color textColor =/*Colors.white;*/ Color(int.parse(gridsModel.entityBeingEdited.textColor));
 
   colorToHexString(Color color) {
     String a = color.toString();
@@ -97,19 +40,10 @@ class _SliderPageState extends State<SliderPage> {
     String mid = c.substring(2,4);
     String last = c.substring(4);
     print('before');
-    // print(a);
-    // Color aColor = Color(val);
-    // print(aColor.toString());
     print(valString);
     var q = int.parse(valString);
-    // print(val);
     print(q);
     print('here');
-    // print(c);
-    // print(first);
-    // print(mid);
-    // print(last);
-    // print('hello');
     String newColor = mid + first + last;
     return newColor;
   }
@@ -167,6 +101,8 @@ class _SliderPageState extends State<SliderPage> {
 
   void printColor(){
     print(colorToHexString(currentColor));
+    print("__________________");
+    print(_values['text']);
   }
 
   String getTextColor(){
@@ -200,6 +136,7 @@ class _SliderPageState extends State<SliderPage> {
   void _save(BuildContext context, GridsModel model) async {
     model.entityBeingEdited.textColor = textColor.value.toString();
     model.entityBeingEdited.backgroundColor = currentColor.value.toString();
+    model.entityBeingEdited.text = _values['text'].length>0 ? _values['text'].toString() : "Hello";
     if (model.entityBeingEdited.id == -1) {
       await GridsDBWorker.db.create(model.entityBeingEdited);
     } else {
@@ -215,6 +152,19 @@ class _SliderPageState extends State<SliderPage> {
     );
   }
 
+
+
+
+
+  final GlobalKey<FormFieldState<String>> _customTextKey = GlobalKey();
+
+  _notEmpty(String value) => value != null && value.isNotEmpty;
+  get _values =>
+      ({
+        'text': _customTextKey.currentState?.value,
+      });
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -223,8 +173,18 @@ class _SliderPageState extends State<SliderPage> {
       child: _buildControlButtons(context, gridsModel)
       ),
       body: Container(
-          padding: EdgeInsets.only(top: 50.0),
+          padding: EdgeInsets.only(left: 20.0),
           child: Column(children: <Widget>[
+            TextFormField(
+            key: _customTextKey,
+            initialValue: gridsModel.entityBeingEdited.text,
+            decoration: const InputDecoration(
+              labelText: 'Custom Text',
+              hintText: 'Enter a Name',
+            ),
+            validator: (value) =>
+            !_notEmpty(value.toString()) ? 'Title is required' : null,
+          ),
             _createSlider(),
             _createSwitch(),
           Container(
@@ -294,19 +254,13 @@ class _SliderPageState extends State<SliderPage> {
   }
 
   Widget _createImage() {
-    // return Image(
-    //   image:
-    //   NetworkImage(_imageURL),
-    //   width: _sliderValue,
-    //   fit: BoxFit.contain,
-    // );
     return Container(
       decoration: BoxDecoration(shape: BoxShape.circle,
           color: currentColor),
       width: _sliderValue,
        // fit: BoxFit.contain,
       height: 20,
-      child: Center(child: Text('Hello', style: TextStyle(color: textColor,fontSize: _sliderValue/5)))
+      child: Center(child: Text(_values['text'] != null  ? _values['text'].toString() : "Hello", style: TextStyle(color: textColor,fontSize: _sliderValue/5)))
     );
   }
 
