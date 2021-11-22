@@ -26,9 +26,9 @@ class SliderPage extends StatefulWidget {
 }
 
 class _SliderPageState extends State<SliderPage> {
-  Color currentColor =// Colors.green;
-  Color(int.parse(gridsModel.entityBeingEdited.backgroundColor));
-  Color textColor =/*Colors.white;*/ Color(int.parse(gridsModel.entityBeingEdited.textColor));
+  Color currentColor = gridsModel.entityBeingEdited != null ?
+  Color(int.parse(gridsModel.entityBeingEdited.backgroundColor)) : Colors.black;
+  Color textColor = gridsModel.entityBeingEdited != null ? Color(int.parse(gridsModel.entityBeingEdited.textColor)) : Colors.white;
 
   colorToHexString(Color color) {
     String a = color.toString();
